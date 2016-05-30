@@ -1,0 +1,11 @@
+---
+applications:
+- name: mqtt-listener
+  memory: 512M
+  host: mqtt-listener
+  path: target/mqtt-listener-0.4.9.jar
+  services:
+  - mqtt-listener-db
+  - mqtt-listener-messages
+  env:
+    VERSION: 0.4.9

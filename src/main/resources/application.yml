@@ -1,0 +1,11 @@
+services:
+  mqtt:
+    hostname: tcp://${vcap.services.mqtt-listener-messages.credentials.hostname:localhost}
+    port: ${vcap.services.mqtt-listener-messages.credentials.port:1883}
+    username: ${vcap.services.mqtt-listener-messages.credentials.username:mqtt-listener}
+    password: ${vcap.services.mqtt-listener-messages.credentials.password:test}
+    clientName: mqtt-listener
+    topic: mqtt-listener/test-data
+logging:
+  level:
+    org.trustedanalytics.mqttlistener: DEBUG

@@ -1,0 +1,8 @@
+.idea/
+*.iws
+*.iml
+/out/
+
+hs_err_pid*
+
+.DS_Store

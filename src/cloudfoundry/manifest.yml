@@ -1,0 +1,10 @@
+---
+applications:
+- name: mqtt-listener
+  memory: 512M
+  host: mqtt-listener
+  path: target/mqtt-listener-${version}.jar
+  services:
+  - mqtt-listener-messages
+  env:
+    VERSION: ${version}
