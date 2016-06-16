@@ -7,27 +7,27 @@ We'll take their [Java Client](https://github.com/eclipse/paho.mqtt.java) which 
 ## Connecting to MQTT broker
 First we need to connect to MQTT. It could be achieved with following code fragment:
 ```Java
-    MqttConnectOptions connectOptions = new MqttConnectOptions();
-    connectOptions.setUserName("myuser");
-    connectOptions.setPassword("mypassword".toCharArray());
-    connectOptions.setCleanSession(false);
-    client = new MqttClient("tcp://mymqtthost.com:1833", "myClientId", new MemoryPersistence());
-    client.connect(connectOptions);
+MqttConnectOptions connectOptions = new MqttConnectOptions();
+connectOptions.setUserName("myuser");
+connectOptions.setPassword("mypassword".toCharArray());
+connectOptions.setCleanSession(false);
+client = new MqttClient("tcp://mymqtthost.com:1833", "myClientId", new MemoryPersistence());
+client.connect(connectOptions);
 ```
 
 The key element here is MqttClient. Find detailed description of the class here: [MqttClient(String, String, MqttClientPersistence)](https://www.eclipse.org/paho/files/javadoc/org/eclipse/paho/client/mqttv3/MqttClient.html) 
 
-> In order to connect to the broker you need to know the server URI, username and password for the connection, choose a client identification string and decide on connection persistance. Visit application.yml and "Deploying on TAP" [TBD] to see what values we'll use in this example and we're going to obtain them.
+> In order to connect to the broker you need to know the server URI, username and password for the connection, choose a client identification string and decide on connection persistance. Visit application.yml and ["Deploying on TAP"](docs/Deploying-on-TAP.md)  to see what values we'll use in this example and we're going to obtain them.
  
 ## Publishing messages
 After obtaining the connection, in order to publish a message to selected topic you could do the following:
 ```Java
-    String content = "hello, world!";
-    String topic = "myTopic";
-    int qos = 2;
-    MqttMessage message = new MqttMessage(content.getBytes());
-    message.setQos(qos);
-    client.publish(topic, message);
+String content = "hello, world!";
+String topic = "myTopic";
+int qos = 2;
+MqttMessage message = new MqttMessage(content.getBytes());
+message.setQos(qos);
+client.publish(topic, message);
 ```
 
 ## Receiving messages 
@@ -40,10 +40,11 @@ The authors of Paho client created a callback mechanism ([MqttCallback](https://
 You can use the interface to provide your own handler by overriding selected methods:
 
 | method | purpose |
-|--|--|
-| connectionLost(Throwable cause)  |  called when the connection to the server was lost  |
-| deliveryComplete(IMqttDeliveryToken token) | called when delivery for a message has been completed (all acknowledgments have been received) |
-| messageArrived(String topic, MqttMessage message) | called when new message arrived from the server |
+|---|---|
+| connectionLost  |  called when the connection to the server was lost  |
+| deliveryComplete| called when delivery for a message has been completed (all acknowledgments have been received) |
+| messageArrived  | called when new message arrived from the server |
+
 
 You could create the following class:
 

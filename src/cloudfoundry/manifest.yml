@@ -3,7 +3,7 @@ applications:
 - name: mqtt-listener
   memory: 512M
   host: mqtt-listener
-  path: target/mqtt-listener-${version}.jar
+  path: target/mqtt-listener-example-${version}.jar
   services:
   - mqtt-listener-messages
   env:

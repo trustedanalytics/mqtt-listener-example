@@ -2,7 +2,7 @@
 *.iws
 *.iml
 /out/
-
+/target/
 hs_err_pid*
 
 .DS_Store

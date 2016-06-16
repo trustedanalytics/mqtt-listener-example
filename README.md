@@ -7,8 +7,10 @@ Simple example of consuming MQTT messages on TAP (with Java).
 * [Configuring security](docs/Configure-security-in-Mosquitto.md) 
 * [Sending and receiving messages](docs/Sending-and-receiving-messages.md) 
 
+## Deployment and testing
+* [Deploying on TAP](docs/Deploying-on-TAP.md)
+* [Simple tests](docs/Testing.md)
 
-# TODO 
-* Describe installing Mosquitto on Linux
-* Describe how to obtain MQTT credentials from TAP
+
+## TODO 
 * Think of reconnection logic
