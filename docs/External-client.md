@@ -8,15 +8,24 @@ As the certificate is public, you can download it with the openssl command-line 
 ```bash
 #!/usr/bin/env bash
 
-MQTT_SERVER=mqtt.demo-gotapaas.com
-MQTT_PORT=32903
+MQTT_SERVER=<<host>>
+MQTT_PORT=<<port>>
 CERT_OUTPUT_FILE=mqtt-cert.pem
 
 echo | openssl s_client -connect ${MQTT_SERVER}:${MQTT_PORT} -showcerts 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ${CERT_OUTPUT_FILE}
 ```
 
-
 Some info on configuring certificate for Mosquitto client: http://stackoverflow.com/a/34333973
+
+## Connecting with CLI
+If you want to connect to Mosquitto broker on secured port (this is how TAP exposes the service) with CLI, you need to provide server certificate,
+
+For example:
+```
+mosquitto_sub -h mqtt.demo.gotapaas.eu -p 32914 -u testuser -P testpassword --cafile mqtt-cert.pem -t mqtt-listener/test-data
+mosquitto_pub -h mqtt.demo.gotapaas.eu -p 32914 -u testuser -P testpassword --cafile mqtt-cert.pem -t mqtt-listener/test-data -m test
+````
+
 
 
 ## Example client

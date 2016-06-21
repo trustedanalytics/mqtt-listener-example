@@ -41,7 +41,7 @@ public class Ingestion {
         try {
             String url = mqttProperties.getHostname() + ":" + mqttProperties.getPort();
             LOGGER.info("Opening MQTT connection: '{}'", url);
-            LOGGER.info("properties: " + mqttProperties);
+            LOGGER.info("properties: {}", mqttProperties);
             MqttConnectOptions connectOptions = new MqttConnectOptions();
             connectOptions.setUserName(mqttProperties.getUsername());
             connectOptions.setPassword(mqttProperties.getPassword().toCharArray());
@@ -50,7 +50,6 @@ public class Ingestion {
             client.setCallback(onMessageArrived);
             client.connect(connectOptions);
             client.subscribe(mqttProperties.getTopic());
-            System.out.println(client.isConnected());
         } catch (MqttException e) {
             LOGGER.error(e.getMessage(), e);
             throw e;

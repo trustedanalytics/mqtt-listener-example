@@ -50,9 +50,10 @@ In our case you see we wanted 512MB of memory for the app, named it mqtt-listene
 # Deploying the application
 In order to deploy the application on TAP you first need to build the project:
 
-    mvn clean package
+```mvn clean package```
     
-This produces jar file in target directory of the project. The name of the file is going to be mqtt-listener-${version}.jar, where ${version} is current project version (see [`version` property of pom.xml](../pom.xml)).
+This produces jar file in target directory of the project. The name of the file is going to be mqtt-listener-${version}.jar, 
+where ${version} is current project version (see [`version` property of pom.xml](../pom.xml)).
 
 To deploy, you can use the CLI:
 
@@ -60,78 +61,14 @@ To deploy, you can use the CLI:
     
 It assumes you are logged in (cf login), and the current directory is the project root dir. This way `cf push` uses manifest.yml that contains all required information.
 
+# [Optional] Verifying Mosquitto service metadata
+After the service has been bound to the app, and the app is running, you may want to verify the metadata associated with the service.
 
-# How to access the credentials in the app
-After binding Mosquitto service instance to the app, the following information is supplied by the platform:
-```
-{
-  "mosquitto14": [
-    {
-      "label": "mosquitto14",
-      "name": "mqtt-listener-messages",
-      "plan": "free",
-      "tags": [
-        "mqtt",
-        "messaging",
-        "lightweight"
-      ],
-      "credentials": {
-        "hostname": "10.0.4.4",
-        "ports": {
-          "1883/tcp": "33102"
-        },
-        "port": "33102",
-        "username": "lh9lylotj4xoqefp",
-        "password": "b0plvnjn6bfi5ouu"
-      }
-    }
-  ]
-}
-```
+It can be done with CLI:
 
-If you take a look at `credentials` section, you find some key information here:
+    cf env mqtt-listener
 
-* hostname, port - the address of the broker
-* username, password - credentials to be used when connecting
+or from TAP's console (go to Services->instances and create and export a service key for that instance).
 
+Visit [How to access the credentials in the app](Mosquitto-service-credentials.md) to check the description of the data.
 
-This information is stored in environment variables. There are many ways of obtaining the data in an app. 
-In this example, we use a nice Spring Boot feature. 
-
-We use property file that recognizes env variables (see [application.yml](../src/application.yml)): 
-
-```
-services:
-  mqtt:
-    hostname: tcp://${vcap.services.mqtt-listener-messages.credentials.hostname:localhost}
-    port: ${vcap.services.mqtt-listener-messages.credentials.port:1883}
-    username: ${vcap.services.mqtt-listener-messages.credentials.username:mqtt-listener}
-    password: ${vcap.services.mqtt-listener-messages.credentials.password:test}
-    clientName: mqtt-listener
-    topic: mqtt-listener/test-data
-logging:
-  level:
-    org.trustedanalytics.mqttlistener: DEBUG
-```
-
-Then we use a config object and automatically inject the properties:
-
-```
-@Component
-@ConfigurationProperties(MqttProperties.PREFIX)
-public class MqttProperties {
-
-    protected static final String PREFIX = "services.mqtt";
-
-    private String hostname;
-    private String port;
-    private String username;
-    private String password;
-    private String clientName;
-    private String topic;
-}
-```
-
-Spring Boot magic maps the properties from application.yml to this bean fields.
-
-Then it gets autowired (in [Config.java](../src/main/java/org/trustedanalytics/mqttlistener/Config.java)) and used to configure MQTT connection ([Ingestion.java](../src/main/java/org/trustedanalytics/mqttlistener/ingestion/Ingestion.java)).  

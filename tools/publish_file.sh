@@ -20,6 +20,7 @@
 HOST="localhost"
 PORT="1883"
 TOPIC="mqtt-listener/test-data"
+CAFILE="mqtt-cert.pem"
 echo "Enter username:"
 read USER
 echo "Enter password:"
@@ -27,6 +28,6 @@ read -s PASS
 while IFS='' read -r line || [[ -n "$line" ]]
 do
     echo  "$p"
-    mosquitto_pub -d -t ${TOPIC} -m "$line" -u ${USER} -P ${PASS} -h ${HOST} -p ${PORT}
+    mosquitto_pub -d -t ${TOPIC} -m "$line" -u ${USER} -P ${PASS} -h ${HOST} -p ${PORT} --cafile ${CAFILE}
     sleep 1
 done < "$1"

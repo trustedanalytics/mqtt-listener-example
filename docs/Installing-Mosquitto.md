@@ -35,20 +35,26 @@ Mosquitto is available in Debian repository and can be installed on Raspbian wit
 sudo apt-get install mosquitto
 ```
 
-
 Please, visit http://repo.mosquitto.org/debian/readme.txt for more details.
 
 If you want to use mosquitto_pub or _sub, you need to install mosquitto-clients, too:
 ```
- sudo apt-get install mosquitto-clients 
+ sudo apt-get install mosquitto-clients
 ```
 
-## Docker 
+
+## Docker
 For docker distribution of Mosquitto you could use https://hub.docker.com/r/toke/mosquitto/:
 
 ```
 docker run -ti -p 1883:1883 -p 9001:9001 toke/mosquitto
 ```
+
+
+# Mosquitto command-line clients
+Some distributions don't include command-line utils for Mosquitto (`mosquitto_pub` and `mosquitto_sub`), they are distributed as separate package `mosquitto-clients`.
+You may need to install the package.
+
 
 # Testing the installation
 If you have `mosquitto_pub` and `mosquitto_sub` installed, you could test the installation by subscribing to a topic and then publishing to the topic (from the command line).

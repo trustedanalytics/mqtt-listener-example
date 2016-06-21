@@ -14,9 +14,19 @@
 # limitations under the License.
 #
 
-# !/usr/bin/env bash
-MQTT_SERVER=mqtt-listener.trusted-krb.gotapaas.eu
-MQTT_PORT=33102
-CERT_OUTPUT_FILE=mqtt-cert.pem
 
-echo | openssl s_client -connect ${MQTT_SERVER}:${MQTT_PORT} -showcerts 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ${CERT_OUTPUT_FILE}
+#usage: ./publish_file_local.sh test-data.txt
+
+HOST="localhost"
+PORT="1883"
+TOPIC="mqtt-listener/test-data"
+echo "Enter username:"
+read USER
+echo "Enter password:"
+read -s PASS
+while IFS='' read -r line || [[ -n "$line" ]]
+do
+    echo  "$p"
+    mosquitto_pub -d -t ${TOPIC} -m "$line" -u ${USER} -P ${PASS} -h ${HOST} -p ${PORT}
+    sleep 1
+done < "$1"
