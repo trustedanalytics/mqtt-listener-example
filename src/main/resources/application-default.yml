@@ -1,0 +1,11 @@
+services:
+  mqtt:
+    hostname: tcp://localhost
+    port: 1883
+    username: mqtt-listener
+    password: test
+    clientName: mqtt-listener
+    topic: mqtt-listener/test-data
+  kafka:
+    topic: ${KAFKA_TOPIC}
+    brokers: localhost:9092

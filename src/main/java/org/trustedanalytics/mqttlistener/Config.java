@@ -21,10 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.trustedanalytics.mqttlistener.consumer.EchoConsumer;
+import org.trustedanalytics.mqttlistener.consumer.KafkaConsumer;
 import org.trustedanalytics.mqttlistener.consumer.MessageConsumer;
 import org.trustedanalytics.mqttlistener.ingestion.Ingestion;
 import org.trustedanalytics.mqttlistener.ingestion.MqttProperties;
 import org.trustedanalytics.mqttlistener.ingestion.OnMessageArrived;
+import org.trustedanalytics.mqttlistener.kafka.KafkaProperties;
 
 @Configuration
 public class Config {
@@ -33,10 +35,12 @@ public class Config {
 
     @Autowired
     private MqttProperties mqttProperties;
+    @Autowired
+    private KafkaProperties kafkaProperties;
 
-    @Bean
-    public MessageConsumer consumer() {
-        return new EchoConsumer();
+    @Bean(initMethod = "init", destroyMethod = "destroy")
+    protected MessageConsumer consumer() {
+        return new KafkaConsumer(kafkaProperties);
     }
 
     @Bean(initMethod = "init", destroyMethod = "destroy")

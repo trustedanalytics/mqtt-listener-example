@@ -27,10 +27,10 @@ public class OnMessageArrived implements MqttCallback {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OnMessageArrived.class);
 
-    private final Consumer<String> scoringStore;
+    private final Consumer<String> consumer;
 
-    public OnMessageArrived(Consumer<String> scoringStore) {
-        this.scoringStore = scoringStore;
+    public OnMessageArrived(Consumer<String> consumer) {
+        this.consumer = consumer;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class OnMessageArrived implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         LOGGER.debug("topic: {}, message: {}", topic, mqttMessage);
         String message = String.format("topic: %s, message: %s", topic, mqttMessage);
-        scoringStore.accept(message);
+        consumer.accept(message);
     }
 
     @Override

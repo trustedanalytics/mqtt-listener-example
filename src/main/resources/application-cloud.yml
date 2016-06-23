@@ -1,0 +1,11 @@
+services:
+  mqtt:
+    hostname: tcp://${vcap.services.mqtt-listener-messages.credentials.hostname}
+    port: ${vcap.services.mqtt-listener-messages.credentials.port}
+    username: ${vcap.services.mqtt-listener-messages.credentials.username}
+    password: ${vcap.services.mqtt-listener-messages.credentials.password}
+    clientName: ${MQTT_CNAME}
+    topic: ${MQTT_TOPIC}
+  kafka:
+    topic: ${KAFKA_TOPIC}
+    brokers: ${vcap.services.kafka-twitter-instance.credentials.uri}
