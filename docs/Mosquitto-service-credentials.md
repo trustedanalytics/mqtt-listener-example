@@ -35,20 +35,20 @@ If you take a look at `credentials` section, you find some key information here:
 This information is stored in environment variables. There are many ways of obtaining the data in an app. 
 In this example, we use a nice Spring Boot feature. 
 
-We use property file that recognizes env variables (see [application.yml](../src/application.yml)): 
+We use property file that recognizes env variables (see [application-cloud.yml](../src/application-cloud.yml)): 
 
 ```
 services:
   mqtt:
-    hostname: tcp://${vcap.services.mqtt-listener-messages.credentials.hostname:localhost}
-    port: ${vcap.services.mqtt-listener-messages.credentials.port:1883}
-    username: ${vcap.services.mqtt-listener-messages.credentials.username:mqtt-listener}
-    password: ${vcap.services.mqtt-listener-messages.credentials.password:test}
-    clientName: mqtt-listener
-    topic: mqtt-listener/test-data
-logging:
-  level:
-    org.trustedanalytics.mqttlistener: DEBUG
+    hostname: tcp://${vcap.services.mqtt-listener-messages.credentials.hostname}
+    port: ${vcap.services.mqtt-listener-messages.credentials.port}
+    username: ${vcap.services.mqtt-listener-messages.credentials.username}
+    password: ${vcap.services.mqtt-listener-messages.credentials.password}
+    clientName: ${MQTT_CNAME}
+    topic: ${MQTT_TOPIC}
+  kafka:
+    topic: ${KAFKA_TOPIC}
+    brokers: ${vcap.services.kafka-mqtt-instance.credentials.uri}
 ```
 
 Then we use a config object and automatically inject the properties:

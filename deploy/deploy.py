@@ -29,6 +29,7 @@ CF_INFO = cf_helpers.get_info(ARGS)
 cf_cli.login(CF_INFO)
 
 cf_cli.create_service('mosquitto14', 'free', 'mqtt-listener-messages')
+cf_cli.create_service('kafka', 'shared', 'kafka-mqtt-instance')
 
 PROJECT_DIR = ARGS.project_dir if ARGS.project_dir else \
     cf_helpers.get_project_dir()

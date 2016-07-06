@@ -16,20 +16,27 @@ echo | openssl s_client -connect ${MQTT_SERVER}:${MQTT_PORT} -showcerts 2>&1 | s
 ```
 
 Some info on configuring certificate for Mosquitto client: http://stackoverflow.com/a/34333973
+Some distributions of mosquitto-client don't support using certificate file. Make sure that you have the latest version.
 
 ## Connecting with CLI
 If you want to connect to Mosquitto broker on secured port (this is how TAP exposes the service) with CLI, you need to provide server certificate,
 
+```
+mosquitto_sub -h mqtt.{HOST_DOMAIN} -p {PORT} -u {USER} -P {PASSWD} --cafile mqtt-cert.pem -t {MQTT_TOPIC}
+mosquitto_pub -h mqtt.{HOST_DOMAIN} -p {PORT} -u {USER} -P {PASSWD} --cafile mqtt-cert.pem -t {MQTT_TOPIC} -m {MESSAGE}
+```
+
 For example:
+
 ```
 mosquitto_sub -h mqtt.demo.gotapaas.eu -p 32914 -u testuser -P testpassword --cafile mqtt-cert.pem -t mqtt-listener/test-data
 mosquitto_pub -h mqtt.demo.gotapaas.eu -p 32914 -u testuser -P testpassword --cafile mqtt-cert.pem -t mqtt-listener/test-data -m test
-````
+```
 
 
 
 ## Example client
-After obtaining the credentials (see: [How to access the credentials in the app](Deploying-on-TAP.md#how-to-access-the-credentials-in-the-app)) you could use a client similar to this one (Python pseudo code) to connect to TAP's MQTT: 
+After obtaining the credentials (see: [How to access the credentials in the app](Deploying-on-TAP.md#optional-verifying-mosquitto-service-metadata)) you could use a client similar to this one (Python pseudo code) to connect to TAP's MQTT: 
 
 ```python
 MQTT_TOPIC_NAME = "mqtt-listener/test-data"

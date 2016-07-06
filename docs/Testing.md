@@ -8,7 +8,7 @@ Create a test file (for example `test.txt`) and run publish script.
 This will send the contents of the file, line by line with 1 second delay, to selected topic.
 
 
-If you are testing remotely (for example, accessing TAP from your local machine), run:
+If you are testing remotely (for example, accessing TAP from your local machine - see [External-client](External-client.md)), run:
 ```
 ./publish_file.sh text.txt
 ```
@@ -22,16 +22,21 @@ If you are testing locally, run:
 
 
 ## Checking the output
-In first version of the demo application only console consumer is provided. It means, in order to check the the outcome, we see console output.
-
-Inspect the application logs to see if the messages were received.
+There are two ways of checking the outcome. 
+The first is to use 'kafka console consumer'. To do this, you should be on the environment where Kafka is installed.
+ 
+    ./kafka-console-consumer.sh --zookeeper {URL:PORT} --topic {TOPIC_NAME} --from-beginning
+    
+The second way is to check application logs.
+ 
+```
+cf logs mqtt-listener 
+```
 
 You should get something similar to:
 
 ```
-cf logs mqtt-listener 
-
-
-[TODO paste real logs]
+2016-07-06T14:26:34.28+0200 [App/0]      OUT [2016-07-06 12:26:34.284] boot - 29 DEBUG [MQTT Call: mqtt-listener] --- OnMessageArrived: topic: mqtt-listener/test-data, message: test
+2016-07-06T14:26:34.28+0200 [App/0]      OUT [2016-07-06 12:26:34.285] boot - 29 DEBUG [MQTT Call: mqtt-listener] --- KafkaConsumer: ---- sending message to Kafka
 ```
 

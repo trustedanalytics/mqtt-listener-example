@@ -3,7 +3,8 @@ Simple example of consuming MQTT messages on TAP (with Java).
 
 
 ## Local development
-* [Installing Mosquitto locally](docs/Installing-Mosquitto.md) 
+* [Installing Mosquitto locally](docs/Installing-Mosquitto.md)
+* [Installing Kafka locally](docs/Installing-Kafka.md)
 * [Configuring security](docs/Configure-security-in-Mosquitto.md) 
 * [Sending and receiving messages](docs/Sending-and-receiving-messages.md) 
 * [Mosquitto service credentials](docs/Mosquitto-service-credentials.md)

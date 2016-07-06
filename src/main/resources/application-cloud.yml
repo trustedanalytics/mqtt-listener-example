@@ -8,4 +8,4 @@ services:
     topic: ${MQTT_TOPIC}
   kafka:
     topic: ${KAFKA_TOPIC}
-    brokers: ${vcap.services.kafka-twitter-instance.credentials.uri}
+    brokers: ${vcap.services.kafka-mqtt-instance.credentials.uri}

@@ -4,7 +4,8 @@ The code is in general the same. TAP systematizes the way an application obtains
 The term for this is "service binging". This section explains how to create one in TAP and how the application can use it.
 #Manual deployment
 
-## Creating a service instance
+## Creating services 
+#### Mosquito instance
 Services available in TAP are presented in TAP's console Marketplace.
 Go to the marketplace:
 ![The marketplace](images/tap-marketplace.png)
@@ -23,6 +24,17 @@ Give the instance a name and click `Create new instance` button:
 
 Now, you should have a mqtt service instance provisioned for you:
 ![Mosquitto in marketplace](images/tap-mosquitto-created.png)
+
+#### Kafka instance
+Procedure to install Kafka is the same as installing Mosquito.   
+
+1. Select Marketplace from menu
+2. Find Kafka and click on its icon
+3. Give the instance a name and click `Create new instance` button:  
+![Kafka in marketplace](images/tap-kafka-create.png)
+
+
+> This example assumes the service is called `kafka-mqtt-instance`. The name is used in `application.yml`. Update the config file if needed.
  
 ## Binding the service to the app
 There are several ways to indicate that given app should use certain service. 
@@ -36,14 +48,19 @@ Manifests are the wey yhe platform let's you declare what you want to have when 
  
 
 ```
--------
 applications:
 - name: mqtt-listener
   memory: 512M
   host: mqtt-listener
-  path: target/mqtt-listener-${version}.jar
+  path: target/mqtt-listener-example-${version}.jar
   services:
   - mqtt-listener-messages
+  - kafka-mqtt-instance
+  env:
+    VERSION: ${version}
+    KAFKA_TOPIC: mqtt-listener-topic
+    MQTT_TOPIC: mqtt-listener/test-data
+    MQTT_CNAME: mqtt-listener
 ``` 
 
 In our case you see we wanted 512MB of memory for the app, named it mqtt-listener and showed that the app should use `mqtt-listener-messages` service.
