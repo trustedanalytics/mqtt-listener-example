@@ -6,3 +6,6 @@
 hs_err_pid*
 
 .DS_Store
+
+# files created during build for Cloud Foundry app
+/manifest.yml
