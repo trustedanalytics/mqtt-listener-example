@@ -2,8 +2,52 @@ In order to connect from outside TAP using secured wire (SSL), you need to use p
 
 ## Certificate 
 
-The certificate provided to the client is the public certificate of the server. As far as I know, there is no way of obtaining it with the TAP console.
-As the certificate is public, you can download it with the openssl command-line utilility, as shown below:
+There are two possible sources from which you can obtain certificates needed to connect to Mosquitto.
+Depending on the system configuration you are working on you may use: 
+
+1. CA-signed certificate - a certificate issued by a trusted CA.
+
+2. Self-signed certificate - a certificate generated during the deploy phase.
+
+
+How to choose the proper source? 
+* If the certificate was generated during the deploy phase you must obtain it directly from the MQTT server. 
+* Otherwise it is better to use the CA-signed certificate located in the certificate repository on the MQTT client's machine.
+
+
+### CA-signed certificate
+
+A CA-signed certificate is usually shipped by the OS vendor together with other CA-signed certificates
+and may be contained within a certificate chain bundle (a special file) on the local Linux machine.
+That means it may already be found on the MQTT client's machine.
+
+To use it we just need to point that file but its location depends on the OS. 
+Below are locations on selected systems:
+
+* Ubuntu:
+    - /etc/ssl/certs/ca-certificates.crt
+
+* Debian:
+    - /etc/ssl/certs/ca-certificates.crt
+
+* CentOS:
+    - /etc/ssl/certs/ca-bundle.crt
+    - /etc/pki/tls/certs/ca-bundle.crt
+
+* Fedora:
+    - /etc/pki/tls/certs/ca-bundle.crt
+
+
+Unfortunately it may differ per server instance and needs to be verified.
+
+Use this file in case the MQTT server has a signed certificate.
+
+
+### Self-signed certificate
+
+The certificate provided to the client may be the public certificate of the MQTT server. 
+As far as I know, there is no way of obtaining it with the TAP console.
+As the certificate is public, you can download it with the openssl command-line utility, as shown below:
 
 ```bash
 #!/usr/bin/env bash
@@ -22,9 +66,12 @@ Some distributions of mosquitto-client don't support using certificate file. Mak
 If you want to connect to Mosquitto broker on secured port (this is how TAP exposes the service) with CLI, you need to provide server certificate,
 
 ```
-mosquitto_sub -h mqtt.{HOST_DOMAIN} -p {PORT} -u {USER} -P {PASSWD} --cafile mqtt-cert.pem -t {MQTT_TOPIC}
-mosquitto_pub -h mqtt.{HOST_DOMAIN} -p {PORT} -u {USER} -P {PASSWD} --cafile mqtt-cert.pem -t {MQTT_TOPIC} -m {MESSAGE}
+mosquitto_sub -h mqtt.{HOST_DOMAIN} -p {PORT} -u {USER} -P {PASSWD} --cafile {MQTT_CERT} -t {MQTT_TOPIC}
+mosquitto_pub -h mqtt.{HOST_DOMAIN} -p {PORT} -u {USER} -P {PASSWD} --cafile {MQTT_CERT} -t {MQTT_TOPIC} -m {MESSAGE}
 ```
+
+where:
+**MQTT_CERT** is a path to a certificate obtained as described in the previous section (see: [Certificate](External-client.md#certificate)) 
 
 For example:
 
@@ -33,7 +80,7 @@ mosquitto_sub -h mqtt.demo.gotapaas.eu -p 32914 -u testuser -P testpassword --ca
 mosquitto_pub -h mqtt.demo.gotapaas.eu -p 32914 -u testuser -P testpassword --cafile mqtt-cert.pem -t mqtt-listener/test-data -m test
 ```
 
-
+Above will use the public certificate obtained from the MQTT server.
 
 ## Example client
 After obtaining the credentials (see: [How to access the credentials in the app](Deploying-on-TAP.md#optional-verifying-mosquitto-service-metadata)) you could use a client similar to this one (Python pseudo code) to connect to TAP's MQTT: 
